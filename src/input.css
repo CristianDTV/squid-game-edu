@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .text-shadow {
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    }
+    .btn-hover {
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+    .btn-hover:hover {
+        transform: scale(1.1);
+    }
+}

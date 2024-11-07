@@ -1,24 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Squid Game: Math Edition</title>
-  <link rel="stylesheet" href="./output.css">
-</head>
-<body class="bg-gray-800 text-white">
-  <div class="h-screen flex flex-col justify-center items-center">
-    <h1 class="text-4xl font-bold mb-6 text-red-500">Squid Game: Math Edition</h1>
-    <p class="text-lg mb-8 text-gray-300">¿Listo para sobrevivir a los desafíos matemáticos?</p>
-    <button id="start-game" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded">
-      Comenzar Juego
-    </button>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Squid Game: Math Edition</title>
+    <link rel="stylesheet" href="./output.css" />
+  </head>
+  <body class="relative h-screen overflow-hidden text-white font-sans">
+    <!-- Video de fondo -->
+    <video
+      id="background-video"
+      autoplay
+      muted
+      class="absolute top-0 left-0 w-full h-full object-cover"
+    >
+      <source src="./video/SQUID_TRAILER.mp4" type="video/mp4" />
+      Tu navegador no soporta videos.
+    </video>
 
-  <script>
-    document.getElementById("start-game").addEventListener("click", () => {
-      window.location.href = "./round1.html"; // Asegúrate de que la ruta es correcta
-    });
-  </script>
-</body>
+    <!-- Contenido sobre el video -->
+    <div class="relative z-10 flex flex-col justify-center items-center h-screen bg-black bg-opacity-60">
+      <h1 class="text-5xl font-extrabold mb-6 text-red-500 text-shadow">
+        Squid Game: Math Edition
+      </h1>
+      <p class="text-xl mb-8 text-gray-300 text-shadow">
+        ¿Listo para sobrevivir a los desafíos matemáticos?
+      </p>
+      <button
+        id="start-game"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full btn-hover shadow-lg"
+      >
+        Comenzar Juego
+      </button>
+      <p id="player-count" class="text-gray-300 text-sm mt-2">
+        Conectando jugadores...
+      </p>
+    </div>
+
+    <!-- Botón para habilitar sonido -->
+    <button
+      id="enable-sound-button"
+      class="absolute z-30 bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
+    >
+      🔊 Habilitar Sonido
+    </button>
+
+    <!-- Lógica de redirección, volumen y contador -->
+    <script>
+      const video = document.getElementById("background-video");
+      const playButton = document.getElementById("start-game");
+      const enableSoundButton = document.getElementById("enable-sound-button");
+
+      // Configurar el rango de tiempo en segundos
+      const startTime = 1; // Empieza a los 30 segundos
+      const endTime = 90; // Termina a los 90 segundos
+
+      // Configurar el volumen inicial
+      video.volume = 0.1; // Volumen bajo por defecto
+
+      // Al cargar el video, establece el tiempo inicial
+      video.addEventListener("loadedmetadata", () => {
+        if (video.readyState >= 1) {
+          video.currentTime = startTime;
+        }
+      });
+
+      // Repetir el video dentro del rango
+      video.addEventListener("timeupdate", () => {
+        if (video.currentTime >= endTime) {
+          video.currentTime = startTime; // Reinicia el video desde el inicio del rango
+        }
+      });
+
+      // Habilitar sonido manualmente
+      enableSoundButton.addEventListener("click", () => {
+        video.muted = false; // Desactiva el mute
+        enableSoundButton.style.display = "none"; // Oculta el botón
+        video.play(); // Reproduce el video con sonido
+      });
+
+      // Redirección al hacer clic en "Comenzar Juego"
+      playButton.addEventListener("click", () => {
+        video.muted = false; // Asegura que el sonido esté habilitado
+        video.play();
+        window.location.href = "./round1.html"; // Redirige a la siguiente página
+      });
+    </script>
+  </body>
 </html>
