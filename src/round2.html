@@ -1,0 +1,55 @@
+<script>
+  // Preguntas de la Ronda 2
+  const questions = [
+    { question: "¿Cuánto es 6 x 7?", answer: "42" },
+    { question: "¿Cuánto es 8 x 5?", answer: "40" },
+    { question: "¿Cuánto es 9 x 3?", answer: "27" },
+  ];
+
+  let currentQuestionIndex = 0;
+
+  // Cargar la pregunta actual
+  function loadQuestion() {
+    const questionElement = document.getElementById("question");
+    if (currentQuestionIndex < questions.length) {
+      questionElement.textContent = questions[currentQuestionIndex].question;
+    } else {
+      alert("¡Ronda completada! Avanzando a la siguiente ronda...");
+      window.location.href = "./round3.html"; // Redirige a la Ronda 3
+    }
+  }
+
+  // Validar la respuesta del jugador
+  function checkAnswer() {
+    const answerInput = document.getElementById("answer");
+    const userAnswer = answerInput.value.trim();
+
+    // Validar la respuesta
+    if (userAnswer === questions[currentQuestionIndex].answer) {
+      alert("¡Correcto!");
+      currentQuestionIndex++;
+      loadQuestion(); // Cargar la siguiente pregunta
+    } else {
+      alert("¡Incorrecto! Estás eliminado.");
+      window.location.href = "./index.html"; // Reinicia el juego
+    }
+
+    // Limpiar el campo de entrada
+    answerInput.value = "";
+  }
+
+  // Manejar el clic en el botón "Responder"
+  document
+    .getElementById("submit-answer")
+    .addEventListener("click", checkAnswer);
+
+  // Manejar el evento de presionar "ENTER" en el campo de texto
+  document.getElementById("answer").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      checkAnswer();
+    }
+  });
+
+  // Inicializar la primera pregunta
+  loadQuestion();
+</script>
