@@ -1,90 +1,180 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Squid Game: Math Edition</title>
-    <link rel="stylesheet" href="./output.css" />
-  </head>
-  <body class="relative h-screen overflow-hidden text-white font-sans">
-    <!-- Video de fondo -->
-    <video
-      id="background-video"
-      autoplay
-      muted
-      class="absolute top-0 left-0 w-full h-full object-cover"
-    >
-      <source src="./video/SQUID_TRAILER.mp4" type="video/mp4" />
-      Tu navegador no soporta videos.
-    </video>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Squid Game: Math Edition</title>
+  <!-- Incluir Tailwind CSS desde el CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="relative h-screen overflow-hidden bg-gray-900 text-white font-sans">
+  <!-- Video de fondo -->
+  <video
+    id="background-video"
+    autoplay
+    muted
+    loop
+    class="absolute top-0 left-0 w-full h-full object-cover brightness-50"
+  >
+    <source src="./video/1107(1).mp4" type="video/mp4" />
+    Tu navegador no soporta videos.
+  </video>
 
-    <!-- Contenido sobre el video -->
-    <div class="relative z-10 flex flex-col justify-center items-center h-screen bg-black bg-opacity-60">
-      <h1 class="text-5xl font-extrabold mb-6 text-red-500 text-shadow">
-        Squid Game: Math Edition
-      </h1>
-      <p class="text-xl mb-8 text-gray-300 text-shadow">
-        ¿Listo para sobrevivir a los desafíos matemáticos?
-      </p>
+  <!-- Contenido principal -->
+  <div class="relative z-10 flex flex-col justify-center items-center h-screen bg-black bg-opacity-60">
+    <h1 class="text-5xl font-extrabold mb-6 text-red-500">
+      Squid Game: Math Edition
+    </h1>
+    <p class="text-xl mb-8 text-gray-300">
+      ¿Listo para sobrevivir a los desafíos matemáticos?
+    </p>
+    <div class="flex gap-4">
       <button
         id="start-game"
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full btn-hover shadow-lg"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full shadow-lg"
       >
         Comenzar Juego
       </button>
-      <p id="player-count" class="text-gray-300 text-sm mt-2">
-        Conectando jugadores...
-      </p>
+      <button
+        id="customize-player"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg"
+      >
+        Personalizar Jugador
+      </button>
     </div>
+  </div>
 
-    <!-- Botón para habilitar sonido -->
-    <button
-      id="enable-sound-button"
-      class="absolute z-30 bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
-    >
-      🔊 Habilitar Sonido
-    </button>
+  <!-- Menú de personalización -->
+  <div
+    id="customization-container"
+    class="hidden fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-80"
+  >
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+      <h2 class="text-2xl font-semibold mb-4 text-white text-center">Personaliza tu personaje</h2>
+      
+      <!-- Campo para el nombre del jugador -->
+      <div class="flex flex-col items-start mb-4">
+        <label for="player-name" class="text-white mb-2">Nombre del jugador:</label>
+        <input
+          type="text"
+          id="player-name"
+          class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Escribe tu nombre"
+        />
+      </div>
+      
+      <!-- Campo para seleccionar accesorio -->
+      <div class="flex flex-col items-start mb-4">
+        <label for="accessory-picker" class="text-white mb-2">Accesorio:</label>
+        <select
+          id="accessory-picker"
+          class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="🎩">Sombrero</option>
+          <option value="👓">Gafas</option>
+          <option value="🎒">Mochila</option>
+        </select>
+      </div>
+      
+      <!-- Campo para el puntaje inicial -->
+      <div class="flex flex-col items-start mb-4">
+        <label for="player-score" class="text-white mb-2">Puntaje inicial:</label>
+        <input
+          type="number"
+          id="player-score"
+          class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Puntaje inicial"
+          value="0"
+          readonly
+        />
+      </div>
 
-    <!-- Lógica de redirección, volumen y contador -->
-    <script>
-      const video = document.getElementById("background-video");
+      <div class="flex justify-between">
+        <button
+          id="save-customization"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+        >
+          Guardar
+        </button>
+        <button
+          id="cancel-customization"
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para habilitar sonido -->
+  <button
+    id="enable-sound-button"
+    class="absolute z-30 bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
+  >
+    🔊 Habilitar Sonido
+  </button>
+
+  <!-- Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
       const playButton = document.getElementById("start-game");
+      const customizeButton = document.getElementById("customize-player");
+      const customizationContainer = document.getElementById("customization-container");
+      const saveCustomizationButton = document.getElementById("save-customization");
+      const cancelCustomizationButton = document.getElementById("cancel-customization");
+      const playerNameInput = document.getElementById("player-name");
+      const playerScoreInput = document.getElementById("player-score");
+      const accessoryPicker = document.getElementById("accessory-picker");
       const enableSoundButton = document.getElementById("enable-sound-button");
+      const video = document.getElementById("background-video");
 
-      // Configurar el rango de tiempo en segundos
-      const startTime = 1; // Empieza a los 30 segundos
-      const endTime = 90; // Termina a los 90 segundos
-
-      // Configurar el volumen inicial
-      video.volume = 0.1; // Volumen bajo por defecto
-
-      // Al cargar el video, establece el tiempo inicial
-      video.addEventListener("loadedmetadata", () => {
-        if (video.readyState >= 1) {
-          video.currentTime = startTime;
-        }
+      // Mostrar menú de personalización
+      customizeButton.addEventListener("click", () => {
+        customizationContainer.classList.remove("hidden");
       });
 
-      // Repetir el video dentro del rango
-      video.addEventListener("timeupdate", () => {
-        if (video.currentTime >= endTime) {
-          video.currentTime = startTime; // Reinicia el video desde el inicio del rango
+      // Guardar personalización
+      saveCustomizationButton.addEventListener("click", () => {
+        const playerCustomization = {
+          name: playerNameInput.value.trim(),
+          score: parseInt(playerScoreInput.value, 10),
+          accessory: accessoryPicker.value,
+        };
+
+        if (!playerCustomization.name) {
+          alert("Por favor, escribe un nombre válido.");
+          return;
         }
+
+        localStorage.setItem("playerCustomization", JSON.stringify(playerCustomization));
+        customizationContainer.classList.add("hidden");
+        alert(`¡Personalización guardada para ${playerCustomization.name} con accesorio ${playerCustomization.accessory}!`);
       });
 
-      // Habilitar sonido manualmente
+      // Cancelar personalización
+      cancelCustomizationButton.addEventListener("click", () => {
+        customizationContainer.classList.add("hidden");
+      });
+
+      // Habilitar sonido
       enableSoundButton.addEventListener("click", () => {
-        video.muted = false; // Desactiva el mute
-        enableSoundButton.style.display = "none"; // Oculta el botón
-        video.play(); // Reproduce el video con sonido
+        video.muted = false;
+        enableSoundButton.style.display = "none";
+        video.play();
       });
 
-      // Redirección al hacer clic en "Comenzar Juego"
+      // Verificar personalización antes de iniciar el juego
       playButton.addEventListener("click", () => {
-        video.muted = false; // Asegura que el sonido esté habilitado
-        video.play();
-        window.location.href = "./round1.html"; // Redirige a la siguiente página
+        const playerCustomization = localStorage.getItem("playerCustomization");
+        if (!playerCustomization) {
+          alert("Por favor, personaliza tu personaje antes de comenzar el juego.");
+        } else {
+          const { name, score, accessory } = JSON.parse(playerCustomization);
+          alert(`¡Bienvenido ${name}! Tu puntaje inicial es: ${score}. Accesorio seleccionado: ${accessory}`);
+          window.location.href = "./round1.html";
+        }
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
