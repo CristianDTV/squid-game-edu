@@ -1,56 +1,82 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Squid Game: Math Edition</title>
+  <title>Squid Game: Edición Matemática</title>
   <!-- Incluir Tailwind CSS desde el CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Descripción para SEO y accesibilidad -->
+  <meta name="description" content="Juego educativo de matemáticas basado en Squid Game para practicar operaciones básicas">
 </head>
 <body class="relative h-screen overflow-hidden bg-gray-900 text-white font-sans">
-  <!-- Video de fondo -->
+  <!-- Video de fondo con controles de accesibilidad -->
   <video
     id="background-video"
     autoplay
     muted
     loop
     class="absolute top-0 left-0 w-full h-full object-cover brightness-50"
+    aria-hidden="true"
   >
     <source src="./video/1107(1).mp4" type="video/mp4" />
+    <track kind="captions" src="captions.vtt" srclang="es" label="Español">
     Tu navegador no soporta videos.
   </video>
 
   <!-- Contenido principal -->
-  <div class="relative z-10 flex flex-col justify-center items-center h-screen bg-black bg-opacity-60">
-    <h1 class="text-5xl font-extrabold mb-6 text-red-500">
-      Squid Game: Math Edition
+  <main class="relative z-10 flex flex-col justify-center items-center h-screen bg-black bg-opacity-60">
+    <h1 class="text-5xl font-extrabold mb-6 text-red-500" tabindex="0">
+      Squid Game: Edición Matemática
     </h1>
-    <p class="text-xl mb-8 text-gray-300">
+    <p class="text-xl mb-8 text-gray-300" tabindex="0">
       ¿Listo para sobrevivir a los desafíos matemáticos?
     </p>
-    <div class="flex gap-4">
+    <div class="flex flex-col gap-4 w-full max-w-md px-4">
+      <!-- Selector de modo de juego -->
+      <div class="flex flex-col items-start mb-4">
+        <label for="game-mode" class="text-white mb-2">Modo de juego:</label>
+        <select
+          id="game-mode"
+          class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Selecciona el modo de juego"
+        >
+          <option value="suma">Suma</option>
+          <option value="resta">Resta</option>
+          <option value="multiplicacion">Multiplicación</option>
+          <option value="division">División</option>
+          <option value="mixta">Mixta (Todas las operaciones)</option>
+        </select>
+      </div>
+
       <button
         id="start-game"
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full shadow-lg"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        aria-label="Comenzar juego"
       >
         Comenzar Juego
       </button>
       <button
         id="customize-player"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-label="Personalizar jugador"
       >
         Personalizar Jugador
       </button>
     </div>
-  </div>
+  </main>
 
   <!-- Menú de personalización -->
   <div
     id="customization-container"
     class="hidden fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-80"
+    role="dialog"
+    aria-labelledby="customization-title"
   >
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-      <h2 class="text-2xl font-semibold mb-4 text-white text-center">Personaliza tu personaje</h2>
+      <h2 id="customization-title" class="text-2xl font-semibold mb-4 text-white text-center">
+        Personaliza tu personaje
+      </h2>
       
       <!-- Campo para el nombre del jugador -->
       <div class="flex flex-col items-start mb-4">
@@ -92,13 +118,15 @@
       <div class="flex justify-between">
         <button
           id="save-customization"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          aria-label="Guardar personalización"
         >
           Guardar
         </button>
         <button
           id="cancel-customization"
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          aria-label="Cancelar personalización"
         >
           Cancelar
         </button>
@@ -109,12 +137,13 @@
   <!-- Botón para habilitar sonido -->
   <button
     id="enable-sound-button"
-    class="absolute z-30 bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
+    class="absolute z-30 bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    aria-label="Habilitar sonido del juego"
   >
     🔊 Habilitar Sonido
   </button>
 
-  <!-- Script -->
+  <!-- Script modificado -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const playButton = document.getElementById("start-game");
@@ -163,15 +192,26 @@
         video.play();
       });
 
-      // Verificar personalización antes de iniciar el juego
+      // Modificar el evento de inicio del juego
       playButton.addEventListener("click", () => {
         const playerCustomization = localStorage.getItem("playerCustomization");
+        const gameMode = document.getElementById("game-mode").value;
+        
         if (!playerCustomization) {
           alert("Por favor, personaliza tu personaje antes de comenzar el juego.");
         } else {
           const { name, score, accessory } = JSON.parse(playerCustomization);
-          alert(`¡Bienvenido ${name}! Tu puntaje inicial es: ${score}. Accesorio seleccionado: ${accessory}`);
+          // Guardar el modo de juego seleccionado
+          localStorage.setItem("gameMode", gameMode);
+          alert(`¡Bienvenido ${name}! Modo de juego: ${gameMode}. Tu puntaje inicial es: ${score}. Accesorio seleccionado: ${accessory}`);
           window.location.href = "./round1.html";
+        }
+      });
+
+      // Añadir manejo de teclado para accesibilidad
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !customizationContainer.classList.contains("hidden")) {
+          customizationContainer.classList.add("hidden");
         }
       });
     });

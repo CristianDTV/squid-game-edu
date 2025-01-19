@@ -1,249 +1,334 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ronda 1 - Luz Roja, Luz Verde</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="h-screen flex flex-col items-center justify-center bg-gray-800">
-    <h1 class="text-4xl font-bold mb-4 text-white drop-shadow-md">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ronda 1 - Luz Roja, Luz Verde</title>
+  <meta name="description" content="Juego educativo de matemáticas con temporizador y preguntas de operaciones básicas">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-screen flex flex-col items-center justify-center bg-gray-800">
+  <button id="go-home"
+    class="absolute top-5 left-5 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none"
+    onclick="window.location.href='./index.html'"
+    aria-label="Volver al inicio">
+    <span aria-hidden="true">🏠</span> Inicio
+  </button>
+
+  <main role="main">
+    <h1 class="text-4xl font-bold mb-4 text-white drop-shadow-md" tabindex="0">
       Ronda 1: Luz Roja, Luz Verde
     </h1>
-    <p id="instruction" class="text-lg text-gray-300 mb-6 transition-colors">
+    <p id="instruction" class="text-lg text-gray-300 mb-6 transition-colors" aria-live="polite">
       ¡Luz Roja! Resuelve la pregunta.
     </p>
 
-    <!-- Contenedor de la muñeca y el jugador -->
-    <div
-      id="game-container"
+    <!-- Contenedor del juego con roles ARIA -->
+    <div id="game-container"
       class="relative h-[400px] w-full overflow-hidden bg-gray-700 p-6 rounded-lg shadow-lg max-w-md mb-8"
-    >
-      <!-- Muñeca al final -->
-      <div
-        id="doll"
-        class="absolute top-0 left-1/2 transform -translate-x-1/2 text-3xl text-yellow-400"
-      >
+      role="region"
+      aria-label="Área de juego">
+      <div id="doll" class="absolute top-0 left-1/2 transform -translate-x-1/2 text-3xl text-yellow-400" aria-hidden="true">
         👧
       </div>
-      <!-- Jugador al inicio -->
-      <div
-        id="player"
+      <div id="player"
         class="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-[2.5rem] transition-transform duration-500 ease"
-      >
+        role="img"
+        aria-label="Jugador">
         🚶
       </div>
     </div>
 
-    <!-- Contenedor de la pregunta -->
-    <div
-      id="question-container"
+    <!-- Contenedor de la pregunta con roles ARIA -->
+    <div id="question-container" 
       class="bg-gray-700 p-6 rounded-lg shadow-lg max-w-md w-full"
-    >
-      <p id="question" class="text-2xl font-semibold text-white mb-4"></p>
-      <input
-        id="answer"
-        type="text"
-        autocomplete="off"
-        class="w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-green-500 text-gray-900 mb-4"
-        placeholder="Tu respuesta"
-      />
-      <button
-        id="submit-answer"
-        class="w-full py-3 rounded-md bg-green-500 text-white font-semibold hover:bg-green-600 transition-all"
-      >
-        Responder
-      </button>
-      <p id="timer" class="mt-4 text-lg font-medium text-white"></p>
+      role="region"
+      aria-label="Pregunta actual">
+      <div class="flex justify-between items-center mb-4">
+        <p id="progress" class="text-white font-medium" aria-live="polite">Pregunta 1/6</p>
+        <p id="timer" class="text-xl font-bold text-white" aria-live="assertive" role="timer">30</p>
+      </div>
+      <p id="question-text" 
+        class="text-2xl font-semibold text-white mb-4" 
+        aria-live="polite"
+        role="heading"
+        aria-level="2"></p>
+      <div id="options" 
+        class="grid grid-cols-2 gap-4 mb-4"
+        role="group"
+        aria-label="Opciones de respuesta">
+        <button class="option-button w-full py-3 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none"></button>
+        <button class="option-button w-full py-3 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none"></button>
+        <button class="option-button w-full py-3 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none"></button>
+        <button class="option-button w-full py-3 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none"></button>
+      </div>
     </div>
 
-    <!-- Mensajes personalizados -->
-    <div
-      id="message"
+    <!-- Mensajes con roles ARIA -->
+    <div id="message"
       class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg hidden"
-    ></div>
+      role="alert"
+      aria-live="assertive">
+    </div>
 
     <!-- Perfil de logros -->
-    <div
-      id="profile"
+    <aside id="profile" 
       class="absolute top-5 right-5 bg-gray-700 p-4 rounded-lg shadow-lg text-white"
-    >
+      role="complementary"
+      aria-label="Perfil y logros">
       <h3 class="text-lg font-semibold">Logros:</h3>
-    </div>
+    </aside>
+  </main>
 
-    <script>
-      // Preguntas del juego
-      const questions = [
-        { question: "¿Cuánto es 3 + 5?", answer: 8 },
-        { question: "¿Cuánto es 10 - 4?", answer: 6 },
-        { question: "¿Cuánto es 7 + 2?", answer: 9 },
-      ];
+  <!-- Añadir skip link para navegación por teclado -->
+  <a href="#question-container" 
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-500 text-white p-2 rounded">
+    Saltar al contenido principal
+  </a>
 
-      let currentQuestionIndex = 0;
-      let gameState = "red"; // Estados posibles: "red" o "green"
-      let timeLeft = 10;
-      let timerInterval;
-      const TIMER_DURATION = 10; // Duración del temporizador en segundos
-      const GREEN_LIGHT_DURATION = 3000; // Duración de la luz verde en milisegundos
-      const MESSAGE_DISPLAY_DURATION = 2000; // Duración de los mensajes en milisegundos
+  <script type="module">
+    import GameQuestions from './js/gameQuestions.js';
 
-      // Logros del jugador
-      const achievements = [
-        { name: "Primer Logro", condition: 1, unlocked: false, medal: "🥇" },
-        { name: "Maestro Matemático", condition: 3, unlocked: false, medal: "🏆" },
-      ];
-
+    document.addEventListener('DOMContentLoaded', function() {
+      const gameMode = localStorage.getItem('gameMode') || 'suma';
+      const game = new GameQuestions(gameMode);
+      
       // Elementos del DOM
       const gameContainer = document.getElementById("game-container");
       const instruction = document.getElementById("instruction");
-      const questionElement = document.getElementById("question");
-      const answerInput = document.getElementById("answer");
-      const submitButton = document.getElementById("submit-answer");
-      const timerElement = document.getElementById("timer");
-      const messageElement = document.getElementById("message");
-      const doll = document.getElementById("doll");
       const player = document.getElementById("player");
-      const profileContainer = document.getElementById("profile");
+      const messageElement = document.getElementById("message");
+      const timerElement = document.getElementById("timer");
+      const progressElement = document.getElementById("progress");
 
-      // Cargar personalización del jugador
-      const playerCustomization = JSON.parse(localStorage.getItem("playerCustomization"));
-      if (playerCustomization) {
-        player.style.color = playerCustomization.color;
-        player.textContent = `🚶${playerCustomization.accessory}`;
-      }
+      // Configuración del juego
+      let gameState = "red";
+      const GREEN_LIGHT_DURATION = 3000;
+      const MESSAGE_DISPLAY_DURATION = 2000;
+      
+      // Sonidos
+      const correctSound = new Audio('./audio/correct.mp3');
+      const wrongSound = new Audio('./audio/wrong.mp3');
+      const roundChangeSound = new Audio('./audio/tada.mp3');
 
       // Cálculo de distancias para el movimiento del jugador
       const containerHeight = gameContainer.offsetHeight;
-      const totalDistance =
-        containerHeight - player.offsetHeight - doll.offsetHeight;
-      const moveDistance = totalDistance / questions.length;
-      let playerPosition = 0; // Posición inicial del jugador
+      const totalDistance = containerHeight - 100; // Ajusta según necesites
+      const moveDistance = totalDistance / 5; // 5 preguntas por nivel
+      let playerPosition = 0;
 
-      // Reinicia el temporizador
-      function resetTimer() {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
+      // Configuración del temporizador
+      const TIMER_DURATION = 30;
+      let timeLeft = TIMER_DURATION;
+      let timerInterval;
 
-      // Inicia el temporizador
-      function startTimer() {
-        resetTimer();
-        timeLeft = TIMER_DURATION;
-        timerElement.textContent = `Tiempo restante: ${timeLeft} segundos`;
-        timerInterval = setInterval(() => {
-          timeLeft--;
-          timerElement.textContent = `Tiempo restante: ${timeLeft} segundos`;
-          if (timeLeft <= 0) {
-            resetTimer();
-            showMessage("¡Tiempo agotado! Estás eliminado.", "red");
-            setTimeout(() => {
-              window.location.href = "./index.html";
-            }, MESSAGE_DISPLAY_DURATION);
-          }
-        }, 1000);
-      }
-
-      // Carga una nueva pregunta
-      function loadQuestion() {
-        if (currentQuestionIndex < questions.length) {
-          questionElement.textContent =
-            questions[currentQuestionIndex].question;
-          answerInput.value = "";
-          startTimer();
-        } else {
-          // El jugador ha llegado a la meta
-          showMessage("¡Has llegado a la meta!", "green");
-          setTimeout(() => {
-            window.location.href = "./round2.html";
-          }, MESSAGE_DISPLAY_DURATION);
-        }
-      }
-
-      // Cambia a luz verde y permite al jugador avanzar
-      function switchToGreenLight() {
-        resetTimer();
-        gameState = "green";
-        gameContainer.classList.replace("bg-red-700", "bg-green-700");
-        instruction.textContent = "¡Luz Verde! Avanza...";
-        movePlayer();
-        setTimeout(() => {
-          currentQuestionIndex++;
-          switchToRedLight();
-        }, GREEN_LIGHT_DURATION);
-      }
-
-      // Cambia a luz roja y presenta una nueva pregunta
-      function switchToRedLight() {
-        gameState = "red";
-        gameContainer.classList.replace("bg-green-700", "bg-red-700");
-        instruction.textContent = "¡Luz Roja! Resuelve la pregunta.";
-        loadQuestion();
-      }
-
-      // Muestra mensajes al jugador
       function showMessage(message, color) {
+        const messageElement = document.getElementById('message');
         messageElement.textContent = message;
         messageElement.classList.remove("hidden");
-        messageElement.classList.add(
-          color === "red" ? "bg-red-600" : "bg-green-600"
-        );
+        messageElement.classList.add(color === "red" ? "bg-red-600" : "bg-green-600");
+        messageElement.setAttribute('role', 'alert');
+        messageElement.setAttribute('aria-live', 'assertive');
+        
         setTimeout(() => {
           messageElement.classList.add("hidden");
           messageElement.classList.remove("bg-red-600", "bg-green-600");
         }, MESSAGE_DISPLAY_DURATION);
       }
 
-      // Mueve al jugador hacia la muñeca
       function movePlayer() {
         playerPosition += moveDistance;
         player.style.transform = `translate(-50%, -${playerPosition}px)`;
       }
 
-      // Añadir logro al perfil
-      function addAchievementToProfile(achievement) {
-        const achievementElement = document.createElement("div");
-        achievementElement.classList.add("text-white", "flex", "items-center", "mb-2");
-        achievementElement.innerHTML = `${achievement.medal} ${achievement.name}`;
-        profileContainer.appendChild(achievementElement);
+      function switchToGreenLight() {
+        gameState = "green";
+        gameContainer.classList.remove("bg-red-700");
+        gameContainer.classList.add("bg-green-700");
+        instruction.textContent = "¡Luz Verde! Avanza...";
+        movePlayer();
+        setTimeout(() => {
+          switchToRedLight();
+        }, GREEN_LIGHT_DURATION);
       }
 
-      // Verificar y desbloquear logros
-      function checkAchievements() {
-        achievements.forEach((achievement) => {
-          if (!achievement.unlocked && currentQuestionIndex >= achievement.condition) {
-            achievement.unlocked = true;
-            showMessage(`¡Logro desbloqueado: ${achievement.name} ${achievement.medal}!`, "green");
-            addAchievementToProfile(achievement);
+      function switchToRedLight() {
+        gameState = "red";
+        gameContainer.classList.remove("bg-green-700");
+        gameContainer.classList.add("bg-red-700");
+        instruction.textContent = "¡Luz Roja! Resuelve la pregunta.";
+        updateQuestion();
+      }
+
+      function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = TIMER_DURATION;
+        updateTimer();
+        
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimer();
+          
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            gameOver("¡Se acabó el tiempo!");
           }
+        }, 1000);
+      }
+
+      function updateTimer() {
+        timerElement.textContent = timeLeft;
+        if (timeLeft <= 5) {
+          timerElement.classList.add('text-red-500');
+        } else {
+          timerElement.classList.remove('text-red-500');
+        }
+      }
+
+      function gameOver(message) {
+        clearInterval(timerInterval);
+        wrongSound.play();
+        showMessage(message, "red");
+        
+        // Actualizar datos del juego antes de redirigir
+        const gameData = {
+          correctAnswers: game.currentQuestionIndex,
+          totalTime: TIMER_DURATION * game.currentQuestionIndex - timeLeft,
+        };
+        localStorage.setItem("gameData", JSON.stringify(gameData));
+
+        // Actualizar logros
+        const achievements = [];
+        if (game.currentQuestionIndex >= 3) {
+          achievements.push({
+            medal: "🥉",
+            name: "¡Buen intento! Respondiste 3 o más preguntas"
+          });
+        }
+        localStorage.setItem("achievements", JSON.stringify(achievements));
+
+        setTimeout(() => {
+          window.location.href = 'logros.html';
+        }, MESSAGE_DISPLAY_DURATION);
+      }
+
+      function updateProgress() {
+        const progress = game.getProgress();
+        progressElement.textContent = `Pregunta ${progress.current}/6`;
+      }
+
+      function updateQuestion() {
+        const question = game.getCurrentQuestion();
+        const shuffledOptions = game.shuffleOptions(question);
+        
+        document.getElementById('question-text').textContent = question.question;
+        updateProgress();
+        startTimer();
+        
+        // Actualizar las opciones de respuesta con mejor accesibilidad
+        const optionButtons = document.querySelectorAll('.option-button');
+        shuffledOptions.forEach((option, index) => {
+          const button = optionButtons[index];
+          button.textContent = option;
+          button.dataset.value = option;
+          button.setAttribute('aria-label', `Opción ${index + 1}: ${option}`);
+          button.setAttribute('role', 'button');
         });
       }
 
-      // Evento al enviar la respuesta
-      submitButton.addEventListener("click", () => {
-        if (gameState !== "red") return; // Solo permite responder en luz roja
+      function handleAnswer(selectedValue) {
+        if (gameState !== "red") return;
 
-        const userAnswer = parseFloat(answerInput.value.trim());
-        if (userAnswer === questions[currentQuestionIndex].answer) {
+        const question = game.getCurrentQuestion();
+        const correct = parseInt(selectedValue) === question.answer;
+
+        if (correct) {
+          clearInterval(timerInterval);
+          correctSound.play();
           showMessage("¡Correcto!", "green");
           switchToGreenLight();
-          checkAchievements(); // Verificar logros después de una respuesta correcta
-        } else {
-          resetTimer();
-          showMessage("¡Incorrecto! Estás eliminado.", "red");
-          setTimeout(() => {
-            window.location.href = "./index.html";
-          }, MESSAGE_DISPLAY_DURATION);
-        }
-      });
 
-      // Inicializa el juego
-      function initGame() {
-        gameContainer.classList.add("bg-red-700");
-        loadQuestion();
+          if (!game.nextQuestion()) {
+            // Victoria - Completó las 6 preguntas
+            roundChangeSound.play();
+            
+            // Actualizar datos del juego
+            const gameData = {
+              correctAnswers: 6,
+              totalTime: TIMER_DURATION * 6 - timeLeft,
+            };
+            localStorage.setItem("gameData", JSON.stringify(gameData));
+
+            // Actualizar logros por victoria
+            const achievements = [
+              {
+                medal: "🏆",
+                name: "¡Victoria perfecta! Completaste todas las preguntas"
+              },
+              {
+                medal: "⭐",
+                name: `Maestro de ${game.mode}: Dominaste las operaciones`
+              }
+            ];
+
+            // Añadir logro por tiempo si completó rápido
+            if (gameData.totalTime < 120) { // menos de 2 minutos
+              achievements.push({
+                medal: "⚡",
+                name: "¡Velocista! Completaste el juego en tiempo récord"
+              });
+            }
+
+            localStorage.setItem("achievements", JSON.stringify(achievements));
+
+            setTimeout(() => {
+              window.location.href = 'logros.html';
+            }, GREEN_LIGHT_DURATION);
+          }
+        } else {
+          gameOver("¡Respuesta incorrecta!");
+        }
       }
 
-      // Inicia el juego al cargar la página
-      window.addEventListener("DOMContentLoaded", initGame);
-    </script>
-  </body>
+      // Inicializar el juego
+      gameContainer.classList.add("bg-red-700");
+      updateQuestion();
+
+      // Agregar event listeners a los botones de opción
+      document.querySelectorAll('.option-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+          handleAnswer(e.target.dataset.value);
+        });
+      });
+
+      // Cargar personalización del jugador
+      const playerCustomization = JSON.parse(localStorage.getItem("playerCustomization"));
+      if (playerCustomization) {
+        player.textContent = `🚶${playerCustomization.accessory}`;
+      }
+
+      // Mejoras de accesibilidad para el teclado
+      document.addEventListener('keydown', (e) => {
+        // Permitir responder con teclas numéricas 1-4
+        if (e.key >= '1' && e.key <= '4') {
+          const index = parseInt(e.key) - 1;
+          const buttons = document.querySelectorAll('.option-button');
+          if (buttons[index]) {
+            buttons[index].click();
+          }
+        }
+        // Permitir cerrar mensajes con Escape
+        if (e.key === 'Escape') {
+          const message = document.getElementById('message');
+          if (!message.classList.contains('hidden')) {
+            message.classList.add('hidden');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
 </html>
